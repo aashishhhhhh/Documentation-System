@@ -26,3 +26,8 @@ Route::post('/user/login', [AuthController::class, 'login']);
 Route::get('/get-csrf', function () {
     return response()->json(['csrfToken' => csrf_token()]);
 });
+Route::get('/clear-cache', function () {
+    if (Session::flush()) {
+        return response()->json(1);
+    };
+});

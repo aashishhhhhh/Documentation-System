@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Session;
 
 class AuthController extends Controller
 {
@@ -36,6 +37,8 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
+        Session::put('id', auth()->user()->id);
+        Session::put('email', auth()->user()->email);
         return response()->json(['user' => Auth::user()]);
     }
 
@@ -57,7 +60,7 @@ class AuthController extends Controller
             return response()->json($user);
             # code...
         } else {
-            return response()->json('authenticated');
+            return response()->json('unauthenticated');
         }
     }
 }
