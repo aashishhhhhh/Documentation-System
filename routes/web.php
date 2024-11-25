@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HotelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/api/example', [HotelController::class, 'index']);
+Route::get('/user', [AuthController::class, 'checkUser']);
+Route::post('/user/login', [AuthController::class, 'login']);
+
+Route::get('/get-csrf', function () {
+    return response()->json(['csrfToken' => csrf_token()]);
 });
