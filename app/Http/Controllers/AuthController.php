@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Hash;
-use Session;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -62,5 +64,30 @@ class AuthController extends Controller
         } else {
             return response()->json('unauthenticated');
         }
+    }
+
+    public function checkPw(Request $request)
+    {
+
+        $check = Hash::check($request->password, auth()->user()->password);
+        return response()->json($check);
+    }
+
+    public function changePw(Request $request)
+    {
+        try{
+            if(auth()->user()->id!=null)
+            {
+                User::find(auth()->user()->id)->update([
+                    'password' => Hash::make($request->password)
+                ]);
+            }
+            return response()->json(1);
+        }
+        catch(Exception $e)
+        {
+            return response()->json($e->getMessage());
+        }
+
     }
 }
